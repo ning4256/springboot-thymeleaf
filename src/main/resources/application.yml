@@ -1,0 +1,25 @@
+server:
+  port: 80
+  servlet:
+    context-path: /
+spring:
+  jackson:
+    date-format: yyyy-MM-dd
+    time-zone: GMT+8
+  mvc:
+    date-format: yyyy-MM-dd
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/mydb?serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+  thymeleaf:
+    cache: false
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+pagehelper:
+  helper-dialect: mysql
+  support-methods-arguments: true
+  params: pageNum=currentPage,pageSize=pageSize
+logging:
+  level.com.ning4256.springboot.dao: debug

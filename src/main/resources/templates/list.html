@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>员工详情页面</title>
+    <style>
+        table{
+            margin: 30px auto;
+            border: 1px solid red;
+        }
+        td{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <table>
+            <caption>员工详情列表</caption>
+            <tr>
+                <td colspan="7">
+                    <form action="list" method="post">
+                        <input type="hidden" id="cp" name="currentPage" value="1">
+                        姓名：<input type="text" name="ename" size="10" th:value="${vo.ename}"/>
+                        部门：<select name="deptno">
+                            <option value="">---请选择---</option>
+                            <option th:each="dept:${deptList}" th:value="${dept.deptno}" th:text="${dept.dname}" th:selected="${vo.deptno} == ${dept.deptno}"></option>
+                        </select>
+                        入职日期：
+                        <input type="text" size="10" name="begin" th:value="${#dates.format(vo.begin,'yyyy-MM-dd')}">--
+                        <input type="text" size="10" name="end" th:value="${#dates.format(vo.end,'yyyy-MM-dd')}">
+
+                        <input type="submit" value="查询">
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <th>姓名</th>
+                <th>职位</th>
+                <th>工资</th>
+                <th>奖金</th>
+                <th>部门</th>
+                <th>入职时间</th>
+                <th>操作</th>
+            </tr>
+            <tr th:each="emp:${pageInfo.list}">
+                <td>[[${emp.ename}]]</td>
+                <td>[[${emp.job}]]</td>
+                <td>[[${emp.sal}]]</td>
+                <td>
+                    <span th:if="${emp.comm == null}">
+                        无奖金
+                    </span>
+                    <span th:unless="${emp.comm == null}">
+                        [[${emp.comm}]]
+                    </span>
+                </td>
+                <td>[[${emp.dept.dname}]]</td>
+                <td>[[${#dates.format(emp.hiredate, 'yyyy-MM-dd')}]]</td>
+                <td>
+                    <a th:href="@{|/edit/${emp.empno}|}">编辑</a>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="7">
+                    <a th:href="|javascript:page(1)|">首页</a>
+                    <span th:if="${pageInfo.hasPreviousPage}">
+                        <a th:href="|javascript:page(${pageInfo.prePage})|">上一页</a>
+                    </span>
+                    <span th:unless="${pageInfo.hasPreviousPage}">
+                        上一页
+                    </span>
+                    <span th:if="${pageInfo.hasNextPage}">
+                        <a th:href="|javascript:page(${pageInfo.nextPage})|">下一页</a>
+                    </span>
+                    <span th:unless="${pageInfo.hasNextPage}">
+                        下一页
+                    </span>
+                    <a th:href="|javascript:page(${pageInfo.pages})|">尾页</a>
+                </td>
+            </tr>
+
+
+
+        </table>
+    </div>
+
+</body>
+<script>
+    function page(param) {
+        document.getElementById("cp").value = param;
+        document.forms[0].submit();
+    }
+</script>
+
+</html>
